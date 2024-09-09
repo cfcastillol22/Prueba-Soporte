@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    protected $table = 'users';
+    protected $table = 'user';
 
     protected $fillable = ['name', 'email', 'password'];
 
@@ -14,5 +14,4 @@ class User extends Model
     {
         return $this->hasMany(Task::class);
     }
-
 }

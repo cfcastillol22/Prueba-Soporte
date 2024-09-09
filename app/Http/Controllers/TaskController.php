@@ -14,15 +14,25 @@ class TaskController extends Controller
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required|max:500',
-            'user' => 'required|max:500',
+            'user_id' => 'required|integer|exists:user,id'
         ]);
 
-        $task = new Task($validated);
-        $user = User::where('email',$validated['user'])->first();
-        $task->user_id = $user->id;
-        $task->save();
+        try {
+            $task = new Task($validated);
+            $task->save();
 
-        return redirect()->back()->with('success', 'Task created successfully.');
+            $task->load('user');
+
+            return response()->json([
+                'message' => 'Task created successfully',
+                'data' => $task
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error to create task',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // Actualizar tarea
@@ -36,7 +46,7 @@ class TaskController extends Controller
 
         $task = Task::find($id);
 
-        if(!$task) {
+        if (!$task) {
             return redirect()->back()->with('error', 'Task not found.');
         }
 
@@ -50,12 +60,18 @@ class TaskController extends Controller
     {
         $task = Task::find($id);
 
-        if(!$task) {
+        if (!$task) {
             return redirect()->back()->with('error', 'Task not found.');
         }
 
         $task->delete();
 
         return redirect()->back()->with('success', 'Task deleted successfully.');
+    }
+
+    public function index()
+    {
+        $tasks = Task::with('user')->get();
+        return response()->json($tasks);
     }
 }
