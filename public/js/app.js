@@ -1819,7 +1819,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     };
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(['tasks', 'users'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['fetchTasks', 'fetchUsers', 'addTask', 'completeTask', 'deleteTask'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['fetchTasks', 'fetchUsers', 'addTask', 'completeTask', 'deleteTask'])), {}, _defineProperty({
     addTask: function addTask() {
       var _this = this;
       if (!this.newTask.title || !this.newTask.description || !this.newTask.user_id) {
@@ -1857,12 +1857,20 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     },
     deleteTask: function deleteTask(taskId) {
       var _this3 = this;
+      // Se utiliza la acción 'deleteTask'
       this.$store.dispatch('deleteTask', taskId)["catch"](function (error) {
         var _error$response2;
         _this3.errors = ((_error$response2 = error.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || 'Error eliminando la tarea';
       });
     }
-  }),
+  }, "completeTask", function completeTask(taskId) {
+    var _this4 = this;
+    // Se utiliza la acción 'completeTask'
+    this.$store.dispatch('updateTask', taskId)["catch"](function (error) {
+      var _error$response3;
+      _this4.errors = ((_error$response3 = error.response) === null || _error$response3 === void 0 || (_error$response3 = _error$response3.data) === null || _error$response3 === void 0 ? void 0 : _error$response3.message) || 'Error actualizando la tarea';
+    });
+  })),
   mounted: function mounted() {
     this.fetchTasks();
     this.fetchUsers();
@@ -1904,14 +1912,16 @@ var render = function render() {
       staticClass: "mb-1"
     }, [_vm._v(_vm._s(task.description))]), _vm._v(" "), _c("small", {
       staticClass: "text-muted"
-    }, [_vm._v("Assigned to: " + _vm._s(task.user.name))])]), _vm._v(" "), _c("div", [_c("button", {
+    }, [_vm._v("Assigned to: " + _vm._s(task.user.name))])]), _vm._v(" "), _c("div", [!task.completed ? _c("button", {
       staticClass: "btn btn-success btn-sm mr-2",
       on: {
         click: function click($event) {
           return _vm.completeTask(task.id);
         }
       }
-    }, [_vm._v("Complete")]), _vm._v(" "), _c("button", {
+    }, [_vm._v("\n                    Complete\n                ")]) : _c("span", {
+      staticClass: "text-muted"
+    }, [_vm._v("Completed")]), _vm._v(" "), _c("button", {
       staticClass: "btn btn-danger btn-sm",
       on: {
         click: function click($event) {
@@ -2118,10 +2128,12 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
         return Promise.reject(error);
       });
     },
-    updateTask: function updateTask(_ref2, task) {
+    updateTask: function updateTask(_ref2, taskId) {
       var commit = _ref2.commit;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().put("/tasks/".concat(task.id), task).then(function (response) {
-        commit("UPDATE_TASK", response.data);
+      axios__WEBPACK_IMPORTED_MODULE_0___default().put("/tasks/".concat(taskId), {
+        completed: true
+      }).then(function (response) {
+        commit("UPDATE_TASK", response.data.data);
       })["catch"](function (error) {
         return Promise.reject(error);
       });

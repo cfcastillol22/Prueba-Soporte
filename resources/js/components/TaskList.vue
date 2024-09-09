@@ -13,7 +13,11 @@
                     <small class="text-muted">Assigned to: {{ task.user.name }}</small>
                 </div>
                 <div>
-                    <button class="btn btn-success btn-sm mr-2" @click="completeTask(task.id)">Complete</button>
+                    <button v-if="!task.completed" class="btn btn-success btn-sm mr-2" @click="completeTask(task.id)">
+                        Complete
+                    </button>
+                    <span v-else class="text-muted">Completed</span>
+
                     <button class="btn btn-danger btn-sm" @click="deleteTask(task.id)">Delete</button>
                 </div>
             </li>
@@ -95,6 +99,12 @@ export default {
             // Se utiliza la acción 'deleteTask'
             this.$store.dispatch('deleteTask', taskId).catch(error => {
                 this.errors = error.response?.data?.message || 'Error eliminando la tarea';
+            });
+        },
+        completeTask(taskId) {
+            // Se utiliza la acción 'completeTask'
+            this.$store.dispatch('updateTask', taskId).catch(error => {
+                this.errors = error.response?.data?.message || 'Error actualizando la tarea';
             });
         }
     },

@@ -41,11 +41,11 @@ export default new Vuex.Store({
                     return Promise.reject(error);
                 });
         },
-        updateTask({ commit }, task) {
+        updateTask({ commit }, taskId) {
             axios
-                .put(`/tasks/${task.id}`, task)
+                .put(`/tasks/${taskId}`, { completed: true })
                 .then((response) => {
-                    commit("UPDATE_TASK", response.data);
+                    commit("UPDATE_TASK", response.data.data);
                 })
                 .catch((error) => {
                     return Promise.reject(error);

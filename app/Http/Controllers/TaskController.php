@@ -38,21 +38,34 @@ class TaskController extends Controller
 
     public function update(Request $request, $id)
     {
+        try {
+            $validated = $request->validate([
+                'completed' => 'required|boolean'
+            ]);
 
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'required|max:500',
-        ]);
+            $task = Task::find($id);
 
-        $task = Task::find($id);
+            if (!$task) {
+                return response()->json([
+                    'message' => 'Task not found'
+                ], 404);
+            }
 
-        if (!$task) {
-            return redirect()->back()->with('error', 'Task not found.');
+            $task->completed = $validated['completed'];
+            $task->save();
+
+            $task->load('user');
+
+            return response()->json([
+                'message' => 'Task updated successfully',
+                'data' => $task
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error to update task',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-
-        $task->update($validated);
-        return redirect()->back()->with('success', 'Task updated successfully.');
     }
     public function destroy($id)
     {
