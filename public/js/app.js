@@ -1834,7 +1834,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
       // Se utiliza la acción 'addTask' y luego se limpia el formulario
       this.$store.dispatch('addTask', this.newTask).then(function () {
-        //this.$store.dispatch('fetchTasks');
         _this.newTask.title = '';
         _this.newTask.description = '';
         _this.newTask.user_id = '';
@@ -1858,7 +1857,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     },
     deleteTask: function deleteTask(taskId) {
       var _this3 = this;
-      // Se utiliza la acción 'deleteTask'
       this.$store.dispatch('deleteTask', taskId)["catch"](function (error) {
         var _error$response2;
         _this3.errors = ((_error$response2 = error.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || 'Error eliminando la tarea';

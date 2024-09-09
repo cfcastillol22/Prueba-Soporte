@@ -6,6 +6,7 @@ Se actualiza controlador task
 -   se cargan los datos de la relacion con el usuario para mostrarlos en la vista
 -   Se retorna json el lugar de hacer una redireccion
 -   Se crear metodo index para retornar todas las tareas con su realción a usuario para capturar el nombre y mostrarlo en el frontend
+-   Se modifica metodo destroy para eliminar, se retorna json
 
 # Se crea controlador User
 

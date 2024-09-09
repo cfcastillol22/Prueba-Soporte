@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    // Crear tarea
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -35,7 +35,7 @@ class TaskController extends Controller
         }
     }
 
-    // Actualizar tarea
+
     public function update(Request $request, $id)
     {
 
@@ -50,23 +50,32 @@ class TaskController extends Controller
             return redirect()->back()->with('error', 'Task not found.');
         }
 
-        // Corrección: Se actualiza la tarea con datos validados.
+
         $task->update($validated);
         return redirect()->back()->with('success', 'Task updated successfully.');
     }
-
-    // Eliminar tarea
     public function destroy($id)
     {
-        $task = Task::find($id);
+        try {
 
-        if (!$task) {
-            return redirect()->back()->with('error', 'Task not found.');
+            $task = Task::find($id);
+            if (!$task) {
+
+                return response()->json([
+                    'message' => 'Task not found'
+                ], 404);
+            }
+            $task->delete();
+            return response()->json([
+                'message' => 'Task deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'message' => 'Error to delete task',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $task->delete();
-
-        return redirect()->back()->with('success', 'Task deleted successfully.');
     }
 
     public function index()
