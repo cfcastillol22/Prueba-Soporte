@@ -7,6 +7,7 @@ Se actualiza controlador task
 -   Se retorna json el lugar de hacer una redireccion
 -   Se crear metodo index para retornar todas las tareas con su realción a usuario para capturar el nombre y mostrarlo en el frontend
 -   Se modifica metodo destroy para eliminar, se retorna json
+-   Se modifica metodo update para validar y modificar el campo completed
 
 # Se crea controlador User
 
@@ -23,6 +24,7 @@ Se actualiza controlador task
 -   se agregan las acciones fetachTasks y fetachUsers para carga de datos de tareas y usuarios
 -   se agrega el getter user
 -   en general se modifican todas las acciones para que retornen el error en caso de existir un error con el backend
+-   se modifica el action updateTask para enviar atribute complete=true
 -   TODO: refactorizar las demas actions.
 
 # Se modifica vista TaskList vue
@@ -33,7 +35,8 @@ Se actualiza controlador task
 -   se modifica campo user por user_id
 -   se valida que user_id tenga un valor numerico valido.
 -   se agrega errors para mostrar posibles errores con el backend
--   TODO: refactorizar errors
+-   se condiciona el boton completed para que cuando este una tarea completed = true, se muestre texto completed
+-   TODO: refactorizar errors y mensajes de satisfaccion
 
 # Se crea ruta get /tasks para obtener el listado de tareas
 
